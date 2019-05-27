@@ -1,5 +1,6 @@
 
-var Apparatus = function(width, height, scale, color) {
+class Apparatus {
+	constructor(width, height, scale, color){ 
 	this.width = 100;
 	this.height = 50;
 	this.scale = 100.0;
@@ -11,9 +12,10 @@ var Apparatus = function(width, height, scale, color) {
 	}
 
 	this.init();
-};
+	}
 
-Apparatus.prototype.init = function() {
+
+init() {
 	this.x0 = MainFrame.WIDTH / 2.0;
 	this.y0 = MainFrame.HEIGHT - this.height - 160;
 
@@ -34,7 +36,7 @@ Apparatus.prototype.init = function() {
 	this.f = 10.0; // [N]
 }
 
-Apparatus.prototype.reset = function(M, m, l, g, tau, f) {
+reset(M, m, l, g, tau, f) {
 	this.M = M; // [kg]
 	this.m = m; // [kg]
 	this.l = l; // [m]
@@ -43,14 +45,14 @@ Apparatus.prototype.reset = function(M, m, l, g, tau, f) {
 	this.f = f; // [N]
 }
 
-Apparatus.prototype.move = function(action) {
-	var ff = this.f * action
-	var sinTheta = Math.sin(this.theta);
-	var cosTheta = Math.cos(this.theta);
-	var tmp1 = ff + this.m * this.l * sinTheta * this.dtheta * this.dtheta;
-	var tmp2 = this.M + this.m * sinTheta * sinTheta;
-	var ddx = (tmp1 - this.m * this.g * sinTheta * cosTheta) / tmp2;
-	var ddtheta = (this.M * this.g * sinTheta - cosTheta * tmp1) / (this.l * tmp2);
+move(action) {
+	let ff = this.f * action
+	let sinTheta = Math.sin(this.theta);
+	let cosTheta = Math.cos(this.theta);
+	let tmp1 = ff + this.m * this.l * sinTheta * this.dtheta * this.dtheta;
+	let tmp2 = this.M + this.m * sinTheta * sinTheta;
+	let ddx = (tmp1 - this.m * this.g * sinTheta * cosTheta) / tmp2;
+	let ddtheta = (this.M * this.g * sinTheta - cosTheta * tmp1) / (this.l * tmp2);
 
 //	this.x = this.dx * this.tau;
 	this.x += this.dx * this.tau;
@@ -64,21 +66,22 @@ Apparatus.prototype.move = function(action) {
 	this.failed = this.failed || tmpx - this.width / 2 < 0;//
 	this.failed = this.failed || tmpx + this.width / 2 >= MainFrame.WIDTH;
 	this.failed = this.failed || Math.cos(this.theta) <= 0;
-};
 
-Apparatus.prototype.getX = function() {
+}
+
+getX() {
 	return this.x * this.scale;
-};
+}
 
-Apparatus.prototype.isMovable = function() {
+isMovable() {
 	return Math.cos(this.theta) > 0;
-};
+}
 
-Apparatus.prototype.isFailed = function() {
+isFailed() {
 	return this.failed;
-};
+}
 
-Apparatus.prototype.drawCart = function(ctx) {
+drawCart(ctx) {
 	var tmpx = this.x0 + this.x * this.scale - this.width / 2.0;
 	var tmpy = this.y0;
 	var r = this.height / 5.0;
@@ -125,6 +128,7 @@ Apparatus.prototype.drawCart = function(ctx) {
 	ctx.lineTo(tmpx + this.width / 2.0 + 2.0 * this.l * this.scale * Math.sin(this.theta),
 		tmpy - 2.0 * this.l * this.scale * Math.cos(this.theta));
 	ctx.stroke();
-};
+}
+}
 
 
