@@ -144,9 +144,25 @@
 	}
     </script>
     <style type="text/css">
-      canvas { background-color:#FFF; border: 1px solid #999; max-width: 100vw; height: auto; display: block; margin: 0 auto; }
-      #outer { display: flex; justify-content: center; width: 100vw; }
-      #canvasContainer { max-width: 100vw; overflow-x: auto; }
+      canvas {
+        background-color:#FFF;
+        border: 1px solid #999;
+        max-width: 100vw;
+        width: 98vw;
+        height: auto;
+        aspect-ratio: 5/3;
+        display: block;
+        margin: 0 auto;
+      }
+      #outer {
+        display: flex;
+        justify-content: center;
+        width: 100vw;
+      }
+      #canvasContainer {
+        max-width: 100vw;
+        overflow-x: auto;
+      }
       @media (max-width: 850px) {
         canvas { width: 98vw !important; max-width: 98vw; }
       }
