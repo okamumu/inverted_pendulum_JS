@@ -145,6 +145,7 @@
         aspect-ratio: 5/3;
         display: block;
         margin: 0 auto;
+        max-height: 60vh;
       }
       #outer {
         display: flex;
@@ -194,7 +195,7 @@
         canvas { width: 98vw !important; max-width: 98vw; }
         .arrow-row { max-width: 98vw; }
       }
-      @media (max-width: 600px), (max-height: 500px) {
+      @media (orientation: landscape) and (max-height: 500px) {
         canvas { max-height: 38vh; }
         .arrow-row button { width: 48px; height: 48px; font-size: 1.3em; }
         .arrow-row { margin-top: 8px; }
