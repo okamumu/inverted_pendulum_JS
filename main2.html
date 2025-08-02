@@ -1,166 +1,39 @@
+<!DOCTYPE html>
 <html lang="ja">
   <head>
     <meta charset="utf-8" />
     <title>Inverted Pendulum</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script type="text/javascript" src="js/apparatus.js"></script>
     <script type="text/javascript" src="js/env.js"></script>
     <script type="text/javascript" src="js/agent.js"></script>
-    <script type="text/javascript">
-    var outerDiv;
-    var canvasDiv;
-    var ctx;
-
-    var cart;
-    var env;
-    var agent;
-
-    var action;
-
-	var time = 0;
-	var episode = 1;
-	var record = 0;
-
-    var MainFrame = {
-        WIDTH : 800,
-        HEIGHT : 480
-    };
-
-    var ApparatusAction = {
-        LEFT : -1,
-        RIGHT : 1,
-        NONE : 0
-    };
-
-    function run() {
-//        while (true) {
-		timeUpdate();
-            if (cart.isMovable()) {
-                if (cart.isFailed()) {
-                    cart.move(action);
-                    cart.drawCart(ctx);
-                } else {
-                    var s = env.getCurrentState();
-//                    action = agent.selectAction();
-
-                    cart.move(action);
-                    agent.setLastAction(action);
-                    cart.drawCart(ctx);
-                    if (cart.isFailed()) {
-						episode++;
-						if(record<time){
-							record = time;
-						}
-						resultUpdate();
-                        console.log('failed!!');
-                        console.log(env.getCurrentState());
-                        console.log(env.getReward(env.getCurrentState()));
-                    }
-					time++;
-                    agent.update(s, env.getCurrentState());
-                }
-            } else {
-				console.log(time);
-				time=0;
-                cart.init();
-                cart.drawCart(ctx);
-                action = ApparatusAction.LEFT;
-            }
-//        }
-    };
-
-    function init() {
-		chg3();
-		episode = 1;
-		time = 0;
-		record = 0;
-		timeUpdate();
-		resultUpdate();
-
-        outerDiv  = document.getElementById("outer");
-        canvasDiv = document.getElementById("canvasContainer");
-
-        document.onkeydown = onDocKeyDown;
-//        document.onmousemove = onDocMouseMove;
-
-        cart = new Apparatus(100, 50, 100, 2);
-        env = new Environment(cart);
-        agent = new Agent(0.1, 0.95, 0.01, env);
-
-        var canvas = document.getElementById('tutorial');
-        if (canvas.getContext){
-            ctx = canvas.getContext('2d');
-            cart.init();
-            cart.drawCart(ctx);
-
-            //setInterval(run, 30);
-        }
-    };
-
-    function onDocKeyDown(e) {
-        if (!e) e = window.event;
-        if (e.key == "ArrowRight") {
-            action = ApparatusAction.RIGHT;
-        } else if (e.key == "ArrowLeft") {
-            action = ApparatusAction.LEFT;
-        } else {
-//            cart.move(0);
-        }
-    };
-
-	var timerID;
-	function chg1(){
-		document.myForm.play.disabled = "true";
-		document.myForm.pause.disabled = "";
-	}
-	function chg2(){
-		document.myForm.play.disabled = "true";
-		document.myForm.fast.disabled = "true";
-		document.myForm.pause.disabled = "";
-	}
-	function chg3(){
-		document.myForm.play.disabled = "";
-		document.myForm.fast.disabled = "";
-		document.myForm.pause.disabled = "true";
-	}
-	function chg4(){
-		document.myForm.play.disabled = "";
-		document.myForm.fast.disabled = "";
-		document.myForm.pause.disabled = "true";
-	}
-	function timeUpdate(){
-		document.getElementById("time").innerHTML = "time: "+time;
-	}
-	function resultUpdate(){
-		// document.getElementById("episode").innerHTML = "episode: "+episode;
-		document.getElementById("record").innerHTML = "record: "+record;
-	}
-    </script>
-    <style type="text/css">
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+      }
+      #outer, #canvasContainer {
+        width: 100%;
+        box-sizing: border-box;
+      }
       canvas {
         background-color:#FFF;
         border: 1px solid #999;
         width: 100%;
         max-width: 800px;
         height: auto;
-        aspect-ratio: 5/3;
+        aspect-ratio: 5 / 3;
         display: block;
         margin: 0 auto;
         max-height: 60vh;
       }
       @media (min-width: 801px) {
-        canvas {
-          width: 800px;
-        }
+        canvas { width: 800px; }
       }
-      #outer {
-        display: flex;
-        justify-content: center;
-        width: 100vw;
+      @media (orientation: landscape) and (max-height: 500px) {
+        canvas { max-height: 38vh; }
       }
-      #canvasContainer {
-        max-width: 100vw;
-        overflow-x: auto;
-      }
+
       .center-controls {
         display: flex;
         flex-direction: column;
@@ -187,65 +60,230 @@
         align-items: center;
         width: 100%;
         max-width: 800px;
-        margin: 16px auto 0 auto;
+        margin: 16px auto 16px auto;
         box-sizing: border-box;
         padding: 0 8px;
       }
       .arrow-row button {
         font-size: 2em;
-        width: 70px;
-        height: 70px;
+        width: 72px;
+        height: 72px;
+        min-width: 88px;     /* 推奨タップ領域 */
+        min-height: 44px;
       }
       @media (max-width: 850px) {
-        canvas { width: 98vw !important; max-width: 98vw; }
-        .arrow-row { max-width: 98vw; }
+        .arrow-row { max-width: 100%; }
       }
       @media (orientation: landscape) and (max-height: 500px) {
-        canvas { max-height: 38vh; }
         .arrow-row button { width: 48px; height: 48px; font-size: 1.3em; }
         .arrow-row { margin-top: 8px; }
       }
     </style>
-  </script></head>
+  </head>
   <body onload="init();">
-<!--     <div id="episode">episode: 0</div> -->
     <div class="center-controls">
       <div class="status-row">
         <div id="time">time: 0</div>
         <div id="record">record: 0</div>
       </div>
-      <form name="myForm" class="button-row">
-        <input type="button" name="play" value="play" onClick="clearInterval(timerID);timerID = setInterval(run, 30);chg1()"/>
-        <input type="button" name="pause" value="pause" disabled onClick="clearInterval(timerID);chg4()"/>
-        <input type="button" name="fast" value="slow" onClick="clearInterval(timerID);timerID = setInterval(run, 80);chg2()"/>
+      <form name="myForm" class="button-row" onsubmit="return false;">
+        <input type="button" name="play"  value="play"  />
+        <input type="button" name="pause" value="pause" disabled />
+        <input type="button" name="fast"  value="slow"  />
       </form>
     </div>
+
     <div id="outer" style="display:flex; justify-content:center;">
       <div id="canvasContainer">
         <canvas id="tutorial" width="800" height="480"></canvas>
         <div id="output"></div>
       </div>
     </div>
+
     <div class="arrow-row">
-      <button id="leftBtn">&#8592;</button>
+      <button id="leftBtn"  aria-label="左へ">&#8592;</button>
       <div style="flex:1;"></div>
-      <button id="rightBtn">&#8594;</button>
+      <button id="rightBtn" aria-label="右へ">&#8594;</button>
     </div>
-<script type="text/javascript">
-document.getElementById('leftBtn').addEventListener('touchstart', function(e){
-  action = ApparatusAction.LEFT;
-  e.preventDefault();
-});
-document.getElementById('leftBtn').addEventListener('mousedown', function(e){
-  action = ApparatusAction.LEFT;
-});
-document.getElementById('rightBtn').addEventListener('touchstart', function(e){
-  action = ApparatusAction.RIGHT;
-  e.preventDefault();
-});
-document.getElementById('rightBtn').addEventListener('mousedown', function(e){
-  action = ApparatusAction.RIGHT;
-});
-</script>
+
+    <script>
+      var outerDiv;
+      var canvasDiv;
+      var ctx;
+
+      var cart;
+      var env;
+      var agent;
+
+      var action;
+
+      var time = 0;
+      var episode = 1;
+      var record = 0;
+
+      var MainFrame = {
+          WIDTH : 800,
+          HEIGHT : 480
+      };
+
+      var ApparatusAction = {
+          LEFT : -1,
+          RIGHT : 1,
+          NONE : 0
+      };
+
+      // --- DPR対応 ---
+      function resizeCanvasForDPR(canvas){
+        const dpr = window.devicePixelRatio || 1;
+        const rect = canvas.getBoundingClientRect();
+        const cssW = Math.max(1, Math.round(rect.width));
+        const cssH = Math.max(1, Math.round(rect.height));
+        // 物理解像度をCSSサイズ×DPRへ
+        canvas.width  = Math.round(cssW * dpr);
+        canvas.height = Math.round(cssH * dpr);
+        // CSSサイズは保持（スタイルに任せる）
+        const context = canvas.getContext('2d');
+        context.setTransform(1,0,0,1,0,0); // リセット
+        context.scale(dpr, dpr);
+        return context;
+      }
+
+      function run() {
+        timeUpdate();
+        if (cart.isMovable()) {
+          if (cart.isFailed()) {
+            cart.move(action);
+            cart.drawCart(ctx);
+          } else {
+            var s = env.getCurrentState();
+            cart.move(action);
+            agent.setLastAction(action);
+            cart.drawCart(ctx);
+            if (cart.isFailed()) {
+              episode++;
+              if(record<time){ record = time; }
+              resultUpdate();
+              console.log('failed!!');
+              console.log(env.getCurrentState());
+              console.log(env.getReward(env.getCurrentState()));
+            }
+            time++;
+            agent.update(s, env.getCurrentState());
+          }
+        } else {
+          console.log(time);
+          time=0;
+          cart.init();
+          cart.drawCart(ctx);
+          action = ApparatusAction.LEFT;
+        }
+      }
+
+      var timerID;
+      function chg1(){
+        document.myForm.play.disabled = true;
+        document.myForm.pause.disabled = false;
+      }
+      function chg2(){
+        document.myForm.play.disabled = true;
+        document.myForm.fast.disabled = true;
+        document.myForm.pause.disabled = false;
+      }
+      function chg3(){
+        document.myForm.play.disabled = false;
+        document.myForm.fast.disabled = false;
+        document.myForm.pause.disabled = true;
+      }
+      function chg4(){
+        document.myForm.play.disabled = false;
+        document.myForm.fast.disabled = false;
+        document.myForm.pause.disabled = true;
+      }
+      function timeUpdate(){
+        document.getElementById("time").textContent = "time: " + time;
+      }
+      function resultUpdate(){
+        document.getElementById("record").textContent = "record: " + record;
+      }
+
+      function wireButtons(){
+        // 再生/停止/スロー
+        document.myForm.play.addEventListener('click', function(){
+          clearInterval(timerID);
+          timerID = setInterval(run, 30);
+          chg1();
+        });
+        document.myForm.pause.addEventListener('click', function(){
+          clearInterval(timerID);
+          chg4();
+        });
+        document.myForm.fast.addEventListener('click', function(){
+          clearInterval(timerID);
+          timerID = setInterval(run, 80);
+          chg2();
+        });
+
+        // 左右ボタン（タッチ＆マウス）
+        var leftBtn  = document.getElementById('leftBtn');
+        var rightBtn = document.getElementById('rightBtn');
+
+        function pressLeft(e){ action = ApparatusAction.LEFT; if(e) e.preventDefault(); }
+        function pressRight(e){ action = ApparatusAction.RIGHT; if(e) e.preventDefault(); }
+        function release(){ action = ApparatusAction.NONE; }
+
+        leftBtn.addEventListener('touchstart', pressLeft,  { passive:false });
+        rightBtn.addEventListener('touchstart', pressRight, { passive:false });
+        leftBtn.addEventListener('mousedown',  pressLeft);
+        rightBtn.addEventListener('mousedown', pressRight);
+
+        // 指を離した/マウスを離したらニュートラルへ
+        leftBtn.addEventListener('touchend', release);
+        rightBtn.addEventListener('touchend', release);
+        document.addEventListener('mouseup', release);
+        document.addEventListener('touchcancel', release);
+      }
+
+      function init() {
+        chg3();
+        episode = 1;
+        time = 0;
+        record = 0;
+        timeUpdate();
+        resultUpdate();
+
+        outerDiv  = document.getElementById("outer");
+        canvasDiv = document.getElementById("canvasContainer");
+
+        document.onkeydown = onDocKeyDown;
+
+        cart = new Apparatus(100, 50, 100, 2);
+        env = new Environment(cart);
+        agent = new Agent(0.1, 0.95, 0.01, env);
+
+        const canvas = document.getElementById('tutorial');
+        if (canvas.getContext){
+          ctx = resizeCanvasForDPR(canvas);
+          cart.init();
+          cart.drawCart(ctx);
+
+          // 画面サイズや向きが変わったら再スケール
+          window.addEventListener('resize', function(){
+            ctx = resizeCanvasForDPR(canvas);
+            cart.drawCart(ctx);
+          });
+        }
+
+        wireButtons();
+      }
+
+      function onDocKeyDown(e) {
+        if (!e) e = window.event;
+        if (e.key === "ArrowRight") {
+          action = ApparatusAction.RIGHT;
+        } else if (e.key === "ArrowLeft") {
+          action = ApparatusAction.LEFT;
+        }
+      }
+    </script>
   </body>
 </html>
