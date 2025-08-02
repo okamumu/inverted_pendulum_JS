@@ -147,6 +147,11 @@
         margin: 0 auto;
         max-height: 60vh;
       }
+      @media (min-width: 801px) {
+        canvas {
+          width: 800px;
+        }
+      }
       #outer {
         display: flex;
         justify-content: center;
@@ -217,7 +222,7 @@
     </div>
     <div id="outer" style="display:flex; justify-content:center;">
       <div id="canvasContainer">
-        <canvas id="tutorial" width="800" height="480"></canvas>
+        <canvas id="tutorial"></canvas>
         <div id="output"></div>
       </div>
     </div>
