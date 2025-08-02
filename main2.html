@@ -136,7 +136,12 @@
 	}
     </script>
     <style type="text/css">
-      canvas { background-color:#FFF; border: 1px solid #999; }
+      canvas { background-color:#FFF; border: 1px solid #999; max-width: 100vw; height: auto; display: block; margin: 0 auto; }
+      #outer { display: flex; justify-content: center; width: 100vw; }
+      #canvasContainer { max-width: 100vw; overflow-x: auto; }
+      @media (max-width: 850px) {
+        canvas { width: 98vw !important; max-width: 98vw; }
+      }
       .center-controls {
         display: flex;
         flex-direction: column;
@@ -155,6 +160,7 @@
         justify-content: center;
         gap: 20px;
         margin-bottom: 20px;
+        flex-wrap: wrap;
       }
       .arrow-row {
         display: flex;
