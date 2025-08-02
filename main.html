@@ -145,24 +145,46 @@
     </script>
     <style type="text/css">
       canvas { background-color:#FFF; border: 1px solid #999; }
+      .center-controls {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
+      }
+      .status-row {
+        display: flex;
+        justify-content: center;
+        gap: 40px;
+        margin-bottom: 10px;
+        font-size: 1.2em;
+      }
+      .button-row {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-bottom: 20px;
+      }
     </style>
-  </script></head>
+  </head>
   <body onload="init();">
-  <body>
-    <div id="episode">episode: 0</div>
-    <div id="time">time: 0</div>
-    <div id="record">record: 0</div>
-    <div id="outer">
+    <div class="center-controls">
+      <div class="status-row">
+        <div id="episode">episode: 0</div>
+        <div id="time">time: 0</div>
+        <div id="record">record: 0</div>
+      </div>
+      <form name="myForm" class="button-row">
+        <input type="button" name="play" value="play" onClick="clearInterval(timerID);timerID = setInterval(run, 30);chg1()">
+        <input type="button" name="pause" value="pause" disabled onClick="clearInterval(timerID);chg4()">
+        <input type="button" name="fast" value="fast" onClick="clearInterval(timerID);timerID = setInterval(run, 0.00001);chg2()">
+        <input type="button" name="reset" value="reset" onClick="clearInterval(timerID);init()">
+      </form>
+    </div>
+    <div id="outer" style="display:flex; justify-content:center;">
       <div id="canvasContainer">
-    <canvas id="tutorial" width="800" height="480"></canvas>
-    <div id="output"></div>
+        <canvas id="tutorial" width="800" height="480"></canvas>
+        <div id="output"></div>
       </div>
     </div>
-		<form name="myForm">
-	<input type="button" name="play" value="play" onClick="clearInterval(timerID);timerID = setInterval(run, 30);chg1()">
-	<input type="button" name="pause" value="pause" disabled onClick="clearInterval(timerID);chg4()">
-    <input type="button" name="fast" value="fast" onClick="clearInterval(timerID);timerID = setInterval(run, 0.00001);chg2()">
-	<input type="button" name="reset" value="reset" onClick="clearInterval(timerID);init()">
-	</form>
   </body>
 </html>

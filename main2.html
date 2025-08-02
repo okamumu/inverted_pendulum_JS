@@ -137,24 +137,79 @@
     </script>
     <style type="text/css">
       canvas { background-color:#FFF; border: 1px solid #999; }
+      .center-controls {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 20px;
+      }
+      .status-row {
+        display: flex;
+        justify-content: center;
+        gap: 40px;
+        margin-bottom: 10px;
+        font-size: 1.2em;
+      }
+      .button-row {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        margin-bottom: 20px;
+      }
+      .arrow-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        width: 90vw;
+        max-width: 800px;
+        margin: 30px auto 0 auto;
+      }
+      .arrow-row button {
+        font-size: 2em;
+        width: 90px;
+        height: 90px;
+      }
     </style>
   </script></head>
   <body onload="init();">
-  <body>
-<!--     <div id="episode">episode: 0</div>
- -->    <div id="time">time: 0</div>
-    <div id="record">record: 0</div>
-    <div id="outer">
+<!--     <div id="episode">episode: 0</div> -->
+    <div class="center-controls">
+      <div class="status-row">
+        <div id="time">time: 0</div>
+        <div id="record">record: 0</div>
+      </div>
+      <form name="myForm" class="button-row">
+        <input type="button" name="play" value="play" onClick="clearInterval(timerID);timerID = setInterval(run, 30);chg1()"/>
+        <input type="button" name="pause" value="pause" disabled onClick="clearInterval(timerID);chg4()"/>
+        <input type="button" name="fast" value="slow" onClick="clearInterval(timerID);timerID = setInterval(run, 80);chg2()"/>
+      </form>
+    </div>
+    <div id="outer" style="display:flex; justify-content:center;">
       <div id="canvasContainer">
-    <canvas id="tutorial" width="800" height="480"></canvas>
-    <div id="output"></div>
+        <canvas id="tutorial" width="800" height="480"></canvas>
+        <div id="output"></div>
       </div>
     </div>
-		<form name="myForm">
-	<input type="button" name="play" value="play" onClick="clearInterval(timerID);timerID = setInterval(run, 30);chg1()"/>
-	<input type="button" name="pause" value="pause" disabled onClick="clearInterval(timerID);chg4()"/>
-    <input type="button" name="fast" value="slow" onClick="clearInterval(timerID);timerID = setInterval(run, 80);chg2()"/>
-<!--	<input type="button" name="reset" value="reset" onClick="clearInterval(timerID);init()"/>
- -->	</form>
+    <div class="arrow-row">
+      <button id="leftBtn">&#8592;</button>
+      <div style="flex:1;"></div>
+      <button id="rightBtn">&#8594;</button>
+    </div>
+<script type="text/javascript">
+document.getElementById('leftBtn').addEventListener('touchstart', function(e){
+  action = ApparatusAction.LEFT;
+  e.preventDefault();
+});
+document.getElementById('leftBtn').addEventListener('mousedown', function(e){
+  action = ApparatusAction.LEFT;
+});
+document.getElementById('rightBtn').addEventListener('touchstart', function(e){
+  action = ApparatusAction.RIGHT;
+  e.preventDefault();
+});
+document.getElementById('rightBtn').addEventListener('mousedown', function(e){
+  action = ApparatusAction.RIGHT;
+});
+</script>
   </body>
 </html>
